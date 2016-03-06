@@ -28,18 +28,19 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #ifdef _WIN32
-    #pragma comment(lib, "opencv_core231.lib")
-    #pragma comment(lib, "opencv_highgui231.lib")
-    #pragma comment(lib, "opencv_imgproc231.lib")
+    #pragma comment(lib, "opencv_core310.lib")
+    #pragma comment(lib, "opencv_highgui310.lib")
+    #pragma comment(lib, "opencv_imgcodecs310.lib")
+    #pragma comment(lib, "opencv_imgproc310.lib")
 
     #ifdef _DEBUG
-        #pragma comment(lib, "wxbase29ud.lib")
-        #pragma comment(lib, "wxmsw29ud_core.lib")
-        #pragma comment(lib, "wxmsw29ud_gl.lib")
+        #pragma comment(lib, "wxbase31ud.lib")
+        #pragma comment(lib, "wxmsw31ud_core.lib")
+        #pragma comment(lib, "wxmsw31ud_gl.lib")
     #else
-        #pragma comment(lib, "wxbase29u.lib")
-        #pragma comment(lib, "wxmsw29u_core.lib")
-        #pragma comment(lib, "wxmsw29u_gl.lib")
+        #pragma comment(lib, "wxbase31u.lib")
+        #pragma comment(lib, "wxmsw31u_core.lib")
+        #pragma comment(lib, "wxmsw31u_gl.lib")
     #endif
 #endif
 

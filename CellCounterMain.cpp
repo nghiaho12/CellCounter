@@ -121,7 +121,7 @@ CellCounterFrame::CellCounterFrame(wxWindow* parent,wxWindowID id)
     	WX_GL_DEPTH_SIZE,      16,
     	WX_GL_STENCIL_SIZE,    0,
     	0, 0 };
-    GLCanvas1 = new wxGLCanvas(Panel1, ID_GLCANVAS1, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GLCANVAS1"), GLCanvasAttributes_1);
+    GLCanvas1 = new wxGLCanvas(Panel1, ID_GLCANVAS1);//, 0, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GLCANVAS1"), GLCanvasAttributes_1);
     GLCanvas1->SetForegroundColour(wxColour(0,49,255));
     GLCanvas1->SetBackgroundColour(wxColour(0,84,255));
     BoxSizer1->Add(GLCanvas1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -314,9 +314,16 @@ void CellCounterFrame::Resize()
     // Can't call this until GLCanvas appears
 //	m_context->SetCurrent(*GLCanvas1);
 
+	static int last_w = 0;
+	static int last_h = 0;
+
     int w, h;
 
     GLCanvas1->GetSize(&w, &h);
+
+	last_w = w;
+	last_h = h;
+
     glViewport(0, 0, w, h);
 
     glMatrixMode(GL_PROJECTION);
@@ -894,6 +901,7 @@ void CellCounterFrame::Reset()
 	UpdateCellCount();
 	UpdateResults();
 
+	Resize();
 	RenderScene();
 }
 
