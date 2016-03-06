@@ -43,9 +43,7 @@ PRE-COMPILED BINARIES FOR WINDOWS
 ===============================================================================
 A pre-compiled Windows version can be found in:
 
-    Win32/CellCounter/Release/CellCounter.exe
-
-Double click the exe and it should run. 
+    http://nghiaho.com/?page_id=1011
 
 
 
@@ -54,7 +52,7 @@ HOW TO COMPILE
 CellCounter is cross platform and has been tested on Ubuntu 15.04 and Windows 7. 
 The following external libraries are required for it to compile:
 
-- wxWidgets 2.9.x (or above)
+- wxWidgets 3.1 (or above)
 - OpenCV 3.x (or above)
 
 The Linux project can be compiled by opening the CellCounter.cbp project in 
