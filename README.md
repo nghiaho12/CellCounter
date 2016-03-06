@@ -51,11 +51,11 @@ Double click the exe and it should run.
 
 HOW TO COMPILE
 ===============================================================================
-CellCounter is cross platform and has been tested on Ubuntu 11.10 and Windows 7. 
+CellCounter is cross platform and has been tested on Ubuntu 15.04 and Windows 7. 
 The following external libraries are required for it to compile:
 
 - wxWidgets 2.9.x (or above)
-- OpenCV 2.3.x (or above)
+- OpenCV 3.x (or above)
 
 The Linux project can be compiled by opening the CellCounter.cbp project in 
 CodeBlocks. The Windows Visual Studio 2010 project can be found in 
