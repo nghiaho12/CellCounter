@@ -53,8 +53,10 @@
 			<Add library="opencv_core" />
 			<Add library="opencv_highgui" />
 			<Add library="opencv_imgproc" />
+			<Add library="opencv_imgcodecs" />
 			<Add library="GL" />
 			<Add library="GLU" />
+			<Add directory="/usr/local/lib" />
 		</Linker>
 		<Unit filename="CellCounter.cpp" />
 		<Unit filename="CellCounter.h" />
