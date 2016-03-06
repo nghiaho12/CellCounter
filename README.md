@@ -41,7 +41,7 @@ These instructions are also found in Help -> How to use
 
 PRE-COMPILED BINARIES FOR WINDOWS
 ===============================================================================
-A pre-compiled Windows version can be found in:
+A pre-compiled Windows version can be found at:
 
     http://nghiaho.com/?page_id=1011
 
