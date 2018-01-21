@@ -1,7 +1,7 @@
 #ifndef __CELLCOUNTER_H__
 #define __CELLCOUNTER_H__
 
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 #include <vector>
 
 class CellCounter

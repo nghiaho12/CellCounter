@@ -10,6 +10,8 @@
 #ifndef CELLCOUNTERMAIN_H
 #define CELLCOUNTERMAIN_H
 
+#include <opencv2/opencv.hpp>
+
 //(*Headers(CellCounterFrame)
 #include <wx/glcanvas.h>
 #include <wx/spinctrl.h>
@@ -23,9 +25,6 @@
 #include <wx/textctrl.h>
 #include <wx/statbmp.h>
 //*)
-
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 
 #ifdef _WIN32
     #pragma comment(lib, "opencv_core310.lib")
