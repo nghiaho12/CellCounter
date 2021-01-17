@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="CellCounter" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/CellCounter" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-Wshadow" />
+					<Add option="-Winit-self" />
+					<Add option="-Wredundant-decls" />
+					<Add option="-Wcast-align" />
+					<Add option="-Wundef" />
+					<Add option="-Wfloat-equal" />
+					<Add option="-Winline" />
+					<Add option="-Wunreachable-code" />
+					<Add option="-Wmissing-declarations" />
+					<Add option="-Wmissing-include-dirs" />
+					<Add option="-Wswitch-enum" />
+					<Add option="-Wswitch-default" />
+					<Add option="-g" />
+					<Add option="-fstack-protector-all" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/CellCounter" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="`wx-config --cflags`" />
+		</Compiler>
+		<Linker>
+			<Add option="`wx-config --libs`" />
+			<Add option="`wx-config --libs gl`" />
+			<Add library="opencv_core" />
+			<Add library="opencv_highgui" />
+			<Add library="opencv_imgproc" />
+			<Add library="opencv_imgcodecs" />
+			<Add library="GL" />
+			<Add library="GLU" />
+			<Add directory="/usr/local/lib" />
+		</Linker>
+		<Unit filename="CellCounter.cpp" />
+		<Unit filename="CellCounter.h" />
+		<Unit filename="CellCounterApp.cpp" />
+		<Unit filename="CellCounterApp.h" />
+		<Unit filename="CellCounterMain.cpp" />
+		<Unit filename="CellCounterMain.h" />
+		<Unit filename="Defines.h" />
+		<Unit filename="OpenGLPanZoom.cpp" />
+		<Unit filename="OpenGLPanZoom.h" />
+		<Unit filename="wxsmith/CellCounterframe.wxs" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="CellCounterApp.cpp" main="CellCounterFrame" init_handlers="necessary" language="CPP" />
+				<resources>
+					<wxFrame wxs="wxsmith/CellCounterframe.wxs" src="CellCounterMain.cpp" hdr="CellCounterMain.h" name="CellCounterFrame" language="CPP" />
+				</resources>
+			</wxsmith>
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
