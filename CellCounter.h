@@ -7,7 +7,7 @@
 class CellCounter
 {
 public:
-    void Run(const cv::Mat &img, int radius_start, int radius_end, int lower, int upper, int keep_cell_size, float circle_threshold);
+    void Run(const cv::Mat &img, const cv::Mat &mask, int radius_start, int radius_end, int lower, int upper, int keep_cell_size, float circle_threshold);
     std::vector <cv::Point2f> &GetResults();
 
 private:

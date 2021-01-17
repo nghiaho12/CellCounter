@@ -115,12 +115,12 @@ CellCounterFrame::CellCounterFrame(wxWindow* parent,wxWindowID id)
     Create(parent, wxID_ANY, _("CellCounter by Nghia Ho"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     Panel1 = new wxPanel(this, ID_PANEL1, wxPoint(104,88), wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
-    int GLCanvasAttributes_1[] = {
-    	WX_GL_RGBA,
-    	WX_GL_DOUBLEBUFFER,
-    	WX_GL_DEPTH_SIZE,      16,
-    	WX_GL_STENCIL_SIZE,    0,
-    	0, 0 };
+    // int GLCanvasAttributes_1[] = {
+    // 	WX_GL_RGBA,
+    // 	WX_GL_DOUBLEBUFFER,
+    // 	WX_GL_DEPTH_SIZE,      16,
+    // 	WX_GL_STENCIL_SIZE,    0,
+    // 	0, 0 };
     GLCanvas1 = new wxGLCanvas(Panel1, ID_GLCANVAS1, NULL);//, 0, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GLCANVAS1"), GLCanvasAttributes_1);
     GLCanvas1->SetForegroundColour(wxColour(0,49,255));
     GLCanvas1->SetBackgroundColour(wxColour(0,84,255));
@@ -240,8 +240,8 @@ CellCounterFrame::CellCounterFrame(wxWindow* parent,wxWindowID id)
     m_init_gl = false;
     m_left_mouse_down = false;
     m_right_mouse_down = false;
-    m_well.x = -1.0f;
-    m_well.y = -1.0f;
+    m_well.x = std::numeric_limits<double>::quiet_NaN();
+    m_well.y = std::numeric_limits<double>::quiet_NaN();
 
 	m_mode = NORMAL;
 	m_view = COLOUR;
@@ -251,8 +251,6 @@ CellCounterFrame::CellCounterFrame(wxWindow* parent,wxWindowID id)
         m_sin[i] = sin(i*M_PI/180);
         m_cos[i] = cos(i*M_PI/180);
     }
-
-    m_last_image = NULL;
 
     char str[128];
     sprintf(str, "CellCounter v%d.%d.%d by Nghia Ho", VERSION_MAJOR, VERSION_MINOR, VERSION_SUB);
@@ -311,18 +309,9 @@ bool CellCounterFrame::InitGL()
 
 void CellCounterFrame::Resize()
 {
-    // Can't call this until GLCanvas appears
-//	m_context->SetCurrent(*GLCanvas1);
-
-	static int last_w = 0;
-	static int last_h = 0;
-
     int w, h;
 
     GLCanvas1->GetSize(&w, &h);
-
-	last_w = w;
-	last_h = h;
 
     glViewport(0, 0, w, h);
 
@@ -439,7 +428,8 @@ void CellCounterFrame::RenderScene()
         */
     }
 
-    if(m_well.x > 0 && m_well.y > 0) {
+    if(m_well.x != std::numeric_limits<double>::quiet_NaN()
+        && m_well.y != std::numeric_limits<double>::quiet_NaN()) {
         DrawCircle(m_well.x, m_well.y, m_well.radius, 1.0f, 0.0f, 0.0f);
     }
 
@@ -501,7 +491,7 @@ void CellCounterFrame::LoadImage(const char *filename)
 
     cv::flip(m_input_image, m_input_image, 0);
 
-	cv::cvtColor(m_input_image, m_grey_image, CV_BGR2GRAY);
+	cv::cvtColor(m_input_image, m_grey_image, cv::COLOR_BGR2GRAY);
 	m_threshold_image = cv::Mat::zeros(m_input_image.size(), CV_8UC3);
 
     if(!m_input_image.data) {
@@ -700,21 +690,41 @@ void CellCounterFrame::OnCountCellsClick(wxCommandEvent& event)
     int x2 = (int)(m_well.x + m_well.radius);
     int y2 = (int)(m_well.y + m_well.radius);
 
+    if(x1 < 0) x1 = 0;
+    if(x1 >= m_input_image.cols) x1 = m_input_image.cols - 1;
+    if(y1 < 0) y1 = 0;
+    if(y1 >= m_input_image.rows) y1 = m_input_image.rows - 1;
+
+    if(x2 < 0) x2 = 0;
+    if(x2 >= m_input_image.cols) x2 = m_input_image.cols - 1;
+    if(y2 < 0) y2 = 0;
+    if(y2 >= m_input_image.rows) y2 = m_input_image.rows - 1;
+
     int w = x2 - x1 + 1;
     int h = y2 - y1 + 1;
 
-    w = (w/4)*4;
-    h = (h/4)*4;
-
-    if(x1 < 0 || x1 >= m_input_image.cols || y1 < 0 || y1 >= m_input_image.rows) {
-        return;
-    }
-
-    if(x2 < 0 || x2 >= m_input_image.cols || y2 < 0 || y2 >= m_input_image.rows) {
+    std::cout << w << " " << h << "\n";
+    if ((w == 0) || (h == 0)) {
         return;
     }
 
     cv::Mat well = m_input_image(cv::Rect(x1, y1, w, h));
+    cv::Mat well_mask = cv::Mat::zeros(well.size(), CV_8U);
+
+    for (int i=0; i < h; i++) {
+        for (int j=0; j < w; j++) {
+            int yi = y1 + i;
+            int xi = x1 + j;
+
+            float yf = yi - m_well.y;
+            float xf = xi - m_well.x;
+            float r = xf*xf + yf*yf;
+
+            if (r <= m_well.radius*m_well.radius) {
+                well_mask.at<uchar>(i,j) = 255;
+            }
+        }
+    }
 
 	int radius_start = m_cell_radius_start_ctrl->GetValue();
 	int radius_end = m_cell_radius_end_ctrl->GetValue();
@@ -723,13 +733,13 @@ void CellCounterFrame::OnCountCellsClick(wxCommandEvent& event)
     int keep_cell_size = m_keep_cells_ctrl->GetValue();
 	float circle_threshold = atof(m_circleness_txt->GetValue().mb_str());
 
-    m_cell_counter.Run(well, radius_start, radius_end, lower, upper, keep_cell_size, circle_threshold);
+    m_cell_counter.Run(well, well_mask, radius_start, radius_end, lower, upper, keep_cell_size, circle_threshold);
 
     m_results = m_cell_counter.GetResults();
 
     for(size_t i=0; i < m_results.size(); i++) {
-        m_results[i].x += m_well.x - m_well.radius;
-        m_results[i].y += m_well.y - m_well.radius;
+        m_results[i].x += x1;//m_well.x - m_well.radius;
+        m_results[i].y += y1;//m_well.y - m_well.radius;
     }
 
     UpdateCellCount();
@@ -829,8 +839,8 @@ void CellCounterFrame::OnMaxCtrlChange(wxSpinEvent& event)
 
 void CellCounterFrame::OnSelectWellClick(wxCommandEvent& event)
 {
-    m_well.x = -1;
-    m_well.y = -1;
+    m_well.x = std::numeric_limits<double>::quiet_NaN();
+    m_well.y = std::numeric_limits<double>::quiet_NaN();
 
     m_mode = SELECT_WELL;
 }
@@ -891,8 +901,8 @@ void CellCounterFrame::UpdateResults()
 
 void CellCounterFrame::Reset()
 {
-    m_well.x = -1.0f;
-    m_well.y = -1.0f;
+    m_well.x = std::numeric_limits<double>::quiet_NaN();
+    m_well.y = std::numeric_limits<double>::quiet_NaN();
     m_well.radius = 0.0f;
 
 	m_results.clear();

@@ -12,15 +12,11 @@
 
 using namespace std;
 
-void CellCounter::Run(const cv::Mat &img, int radius_start, int radius_end, int lower, int upper, int keep_cell_size, float circle_threshold)
+void CellCounter::Run(const cv::Mat &img, const cv::Mat &mask, int radius_start, int radius_end, int lower, int upper, int keep_cell_size, float circle_threshold)
 {
     cv::Mat grey;
-    cv::Mat mask;
 
-    cv::cvtColor(img, grey, CV_BGR2GRAY);
-    cvSetErrMode(CV_ErrModeParent);
-
-    mask = cv::Mat::zeros(grey.size(), CV_8U);
+    cv::cvtColor(img, grey, cv::COLOR_BGR2GRAY);
 
     int min_size = (int)(M_PI*radius_start*radius_start + 0.5f);
 	min_size = max(1, min_size);
@@ -34,24 +30,6 @@ void CellCounter::Run(const cv::Mat &img, int radius_start, int radius_end, int 
     //printf("MIN SIZE: %d\n", min_size);
 
     m_centroids.clear();
-
-    // Create mask
-    {
-        int half_width = img.cols / 2;
-		int inner_ring = 0;
-
-        for(int y=0; y < mask.rows; y++) {
-            for(int x=0; x < mask.cols; x++) {
-                int dx = x - half_width;
-                int dy = y - half_width;
-                int r = dx*dx + dy*dy;
-
-                if(r < (half_width - inner_ring)*(half_width - inner_ring)) {
-                    mask.at<uchar>(y,x) = 255;
-                }
-            }
-        }
-    }
 
     cv::Mat binary = cv::Mat::zeros(grey.size(), CV_8U);
     cv::Mat binary2;
@@ -143,7 +121,7 @@ void CellCounter::Run(const cv::Mat &img, int radius_start, int radius_end, int 
 			for(int i=0; i < 3; i++) {
 				vector <cv::Point2f> tenative_centroids;
 
-                printf("Splitting: %d %d\n", blob.size(), clusters);
+                //printf("Splitting: %d %d\n", blob.size(), clusters);
 				vector < vector<cv::Point2i> > split_blobs = Split(blob, clusters, labels, centres);
 
 				for(size_t j=0; j < split_blobs.size(); j++) {
@@ -198,7 +176,7 @@ float CellCounter::Circleness(std::vector <cv::Point2i> &data)
 
 	_samples.convertTo(samples, CV_32F);
 
-	cv::PCA pca(samples, cv::Mat(), CV_PCA_DATA_AS_ROW, 0);
+	cv::PCA pca(samples, cv::Mat(), cv::PCA::DATA_AS_ROW, 0);
 
 	float ratio = sqrt(pca.eigenvalues.at<float>(0)) / sqrt(pca.eigenvalues.at<float>(1));
 
@@ -213,7 +191,7 @@ vector < vector <cv::Point2i> > CellCounter::Split(std::vector <cv::Point2i> &bl
 {
     // Use K-Means to split the blob
     cv::Mat samples;
-    cv::TermCriteria termcrit = cv::TermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 1000, 0.1);
+    cv::TermCriteria termcrit = cv::TermCriteria(cv::TermCriteria::EPS+cv::TermCriteria::COUNT, 1000, 0.1);
 
     cv::Mat _samples(blob.size(), 2, CV_32S, &blob[0]);
     _samples.convertTo(samples, CV_32F);
