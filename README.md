@@ -1,10 +1,10 @@
 INTRODUCTION
 ===============================================================================
-CellCounter is a VERY domain specific cell counting tool aimed at assisting the 
-user count cells faster. For an example of the type of images the software expects, 
+CellCounter is a VERY domain specific cell counting tool aimed at assisting the
+user count cells faster. For an example of the type of images the software expects,
 please see my website (http://nghiaho.com) for some sample images. This program
-was written primarily to help out a friend with their lab work. I don't plan to 
-extend this program beyond that. I'm releasing this software on the off chance 
+was written primarily to help out a friend with their lab work. I don't plan to
+extend this program beyond that. I'm releasing this software on the off chance
 that someone else might find it useful.
 
 
@@ -49,17 +49,21 @@ A pre-compiled Windows version can be found at:
 
 HOW TO COMPILE
 ===============================================================================
-CellCounter is cross platform and has been tested on Ubuntu 15.04 and Windows 7. 
+CellCounter is cross platform and has been tested on Ubuntu 18.04 and Windows 7.
 The following external libraries are required for it to compile:
 
-- wxWidgets 3.1 (or above)
-- OpenCV 3.x (or above)
+- wxWidgets
+- OpenCV
 
-The Linux project can be compiled by opening the CellCounter.cbp project in 
-CodeBlocks. The Windows Visual Studio 2010 project can be found in 
-Win32/CellCounter. Please change the paths in the project settings to point to
-the correct location of the external libraries.
+To compile using CMake in Linux
 
+```
+mkdir build
+cd build
+cmake ..
+make
+./cellcounter
+```
 
 
 LICENSE
