@@ -1,9 +1,9 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-#define VERSION_MAJOR 0
-#define VERSION_MINOR 2
-#define VERSION_SUB 1
+#define VERSION_MAJOR 2021
+#define VERSION_MINOR 1
+#define VERSION_SUB 17
 
 #ifndef M_PI
 #define M_PI		3.14159265358979323846	/* pi */
