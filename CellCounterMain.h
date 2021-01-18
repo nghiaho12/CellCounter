@@ -26,23 +26,6 @@
 #include <wx/statbmp.h>
 //*)
 
-#ifdef _WIN32
-    #pragma comment(lib, "opencv_core310.lib")
-    #pragma comment(lib, "opencv_highgui310.lib")
-    #pragma comment(lib, "opencv_imgcodecs310.lib")
-    #pragma comment(lib, "opencv_imgproc310.lib")
-
-    #ifdef _DEBUG
-        #pragma comment(lib, "wxbase31ud.lib")
-        #pragma comment(lib, "wxmsw31ud_core.lib")
-        #pragma comment(lib, "wxmsw31ud_gl.lib")
-    #else
-        #pragma comment(lib, "wxbase31u.lib")
-        #pragma comment(lib, "wxmsw31u_core.lib")
-        #pragma comment(lib, "wxmsw31u_gl.lib")
-    #endif
-#endif
-
 #include "OpenGLPanZoom.h"
 #include "CellCounter.h"
 
